@@ -1,0 +1,29 @@
+# Compatibility file: Docker module is now included in compose.yaml.
+services:
+  serverlotse:
+    environment:
+      DOCKER_GATEWAY: http://docker-reader:8100
+    networks: [default, diagnostics, control]
+  docker-reader:
+    build: .
+    image: serverlotse-reader:0.7.4
+    command: [python, docker_gateway.py]
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [diagnostics]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    pids_limit: 32
+    healthcheck:
+      disable: true
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+networks:
+  diagnostics:
+    internal: true

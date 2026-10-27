@@ -1,0 +1,8 @@
+__pycache__
+.env
+*.zip
+*.sha256
+
+# Dokumentation wird im Image nicht gebraucht
+*.md
+docs/

@@ -1,0 +1,12 @@
+# Dedicated write target only. Never point this mount at / or application data.
+services:
+  serverlotse:
+    environment:
+      COPY_ENABLED: "1"
+      RECOVERY_ROOT: /recovery
+    volumes:
+      - type: bind
+        source: ${RECOVERY_PATH:?Separaten Rettungsordner in .env setzen}
+        target: /recovery
+        bind:
+          create_host_path: false

@@ -1,0 +1,149 @@
+services:
+  host-bootstrap:
+    build:
+      context: .
+      dockerfile: Dockerfile.bootstrap
+    image: serverlotse-bootstrap:0.7.4
+    restart: "no"
+    privileged: true
+    pid: host
+    network_mode: none
+    environment:
+      SERVERLOTSE_TOKEN: ${SERVERLOTSE_TOKEN:?Bitte Zugangsschlüssel in .env setzen}
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  serverlotse:
+    build: .
+    image: serverlotse:0.7.4
+    user: "0:0"
+    restart: unless-stopped
+    depends_on:
+      host-bootstrap:
+        condition: service_completed_successfully
+
+    ports:
+      - "${SERVERLOTSE_BIND:-127.0.0.1}:18099:8099"
+
+    environment:
+      SERVERLOTSE_TOKEN: ${SERVERLOTSE_TOKEN:?Bitte Zugangsschlüssel in .env setzen}
+      DATA_PATHS: ${DATA_PATHS:-/mnt/intenso2tb}
+      SCAN_CACHE_DIR: /var/cache/serverlotse
+      SQLITE_TMPDIR: /var/cache/serverlotse
+      DOCKER_GATEWAY: http://docker-reader:8100
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-1}
+      HOST_CONTROL_GATEWAY: http://host-control:8110
+
+    networks:
+      - default
+      - diagnostics
+      - control
+
+    volumes:
+      - scan-cache:/var/cache/serverlotse
+      - type: bind
+        source: /
+        target: /host
+        read_only: true
+        bind:
+          propagation: rslave
+
+      - type: bind
+        source: /run/serverlotse-system
+        target: /system
+        read_only: true
+        bind:
+          create_host_path: true
+
+      - type: bind
+        source: /run/serverlotse-admin
+        target: /admin
+        read_only: true
+        bind:
+          create_host_path: true
+
+    read_only: true
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_READ_SEARCH
+    security_opt:
+      - no-new-privileges:true
+
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 1.0
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  docker-reader:
+    build: .
+    image: serverlotse-reader:0.7.4
+    command: [python, docker_gateway.py]
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - diagnostics
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 64m
+    pids_limit: 32
+    healthcheck:
+      disable: true
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  host-control:
+    build:
+      context: .
+      dockerfile: Dockerfile.control
+    image: serverlotse-control:0.7.4
+    restart: unless-stopped
+    environment:
+      SERVERLOTSE_TOKEN: ${SERVERLOTSE_TOKEN:?Bitte Zugangsschlüssel in .env setzen}
+      HOST_CONTROL_ENABLED: ${HOST_CONTROL_ENABLED:-1}
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/run/dbus/system_bus_socket
+    volumes:
+      - type: bind
+        source: /run/dbus/system_bus_socket
+        target: /run/dbus/system_bus_socket
+        read_only: true
+        bind:
+          create_host_path: false
+    networks:
+      - control
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 64m
+    pids_limit: 32
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+volumes:
+  scan-cache:
+
+networks:
+  diagnostics:
+    internal: true
+  control:
+    internal: true

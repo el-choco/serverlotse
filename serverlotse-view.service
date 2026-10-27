@@ -1,0 +1,13 @@
+[Unit]
+Description=ServerLotse read-only root filesystem view
+After=local-fs.target
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/lib/serverlotse/prepare-host.sh
+ExecStop=/bin/umount /run/serverlotse-system
+
+[Install]
+WantedBy=multi-user.target

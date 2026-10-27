@@ -1,0 +1,6 @@
+FROM python:3.15.1-alpine3.24
+RUN apk add --no-cache dbus
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+COPY host_control.py ./
+CMD ["python", "host_control.py"]

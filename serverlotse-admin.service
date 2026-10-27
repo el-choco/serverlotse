@@ -1,0 +1,25 @@
+[Unit]
+Description=ServerLotse local administration helper
+After=local-fs.target
+Before=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/lib/serverlotse/admin_agent.py
+User=root
+Group=root
+RuntimeDirectory=serverlotse-admin
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+StateDirectory=serverlotse
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=45
+KillMode=control-group
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

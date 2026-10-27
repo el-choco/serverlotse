@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+
+# Release-Artefakte
+*.zip
+*.sha256
+
+# Interne Notizen, nicht für GitHub
+IDEAS.md
+VALIDATION-*.md

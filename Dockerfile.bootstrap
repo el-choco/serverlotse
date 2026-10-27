@@ -1,0 +1,7 @@
+FROM python:3.15.1-alpine3.24
+RUN apk add --no-cache util-linux
+WORKDIR /payload
+COPY deploy_host.py admin_core.py admin_agent.py sensors.py toolkit.py advanced.py automation.py bundle_backup.py proxy_control.py terminal_host.py workbench.py docker_tools.py registry_check.py guardian.py backup_probe.py expert_tools.py network_extras.py docker_extras.py ./
+COPY prepare-host.sh serverlotse-admin.service serverlotse-view.service ./
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+CMD ["python", "deploy_host.py", "--launch"]
