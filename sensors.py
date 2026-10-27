@@ -1,4 +1,3 @@
-"""Read-only sensors and diagnostics. No mutation or arbitrary command endpoint."""
 from collections import deque
 import json
 import os

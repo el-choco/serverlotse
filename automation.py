@@ -1,4 +1,3 @@
-"""Opt-in alerting/healing/maintenance. Defaults are disabled; state is durable."""
 import datetime
 import json
 import re
@@ -16,7 +15,6 @@ FAILURES={}
 def alert(key,text,cfg,now):
     last=advanced.state('alert:'+key) or 0
     if now-last<cfg['cooldown_minutes']*60:return
-    # Failed deliveries also back off, never expose secret URLs in diagnostics.
     advanced.state('alert:'+key,now)
     try:advanced.notify('ServerLotse · '+socket.gethostname()+'\n'+text,cfg);advanced.log_event('notification',key)
     except ValueError as exc:advanced.log_event('notification',str(exc),'error')
@@ -33,7 +31,6 @@ def intentional_stop(target,info,now):
         if any(float(line)>=finished-3 for line in events.splitlines() if line.strip()):
             advanced.state('suppressed:'+target,True);return True
     except (ValueError,TypeError,OverflowError):
-        # If intent cannot be determined, do not restart this target blindly.
         return True
     return False
 

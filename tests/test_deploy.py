@@ -1,4 +1,3 @@
-"""Bootstrap tests only write to a temporary directory; never call host tools."""
 import copy
 import json
 import os
@@ -15,8 +14,7 @@ class DeploymentTests(unittest.TestCase):
         source=Path(__file__).resolve().parent.parent
         self.payload={'token':'a-local-test-token-not-a-real-key','files':{name:(source/name).read_text(encoding='utf-8') for name in deploy.FILES}}
         self.runner=Mock()
-        self.reader=Mock(return_value={'version':'0.7.4','terminal':True})
-        # Windows cannot model Linux ownership or fchmod. All writes stay in tmp.
+        self.reader=Mock(return_value={'version':'0.7.5','terminal':True})
         self.safe=patch.object(deploy,'safe_path',side_effect=lambda root,relative:root/relative);self.safe.start()
         self.mode=patch.object(deploy.os,'fchmod',create=True);self.mode.start()
 
@@ -35,7 +33,7 @@ class DeploymentTests(unittest.TestCase):
     def test_identical_install_does_not_restart_active_sessions(self):
         self.install();self.runner.reset_mock()
         sock=self.root/'run/serverlotse-admin/agent.sock';sock.parent.mkdir(parents=True);sock.touch()
-        self.reader.return_value={'version':'0.7.4','terminal':True,'busy':True,'terminal_sessions':1}
+        self.reader.return_value={'version':'0.7.5','terminal':True,'busy':True,'terminal_sessions':1}
         self.install()
         self.runner.assert_called_once_with(['systemctl','enable','--now','serverlotse-view.service'])
 

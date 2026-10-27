@@ -1,4 +1,3 @@
-/* Shared server-folder dropdown; independent of long-running diagnostic jobs. */
 function installFolderPicker(inputId, viewId) {
   const input = $(inputId), view = $(viewId);
   if (!input || !view) return;
@@ -112,7 +111,6 @@ function installFolderPicker(inputId, viewId) {
     } catch (error) {
       if (request !== sequence || !picker.open) return;
       status.textContent = error.message;
-      // Keep parent navigation available even if a selected folder vanished.
       current = path;
       renderCrumbs();
       positionPanel();
@@ -162,7 +160,6 @@ function installFolderPicker(inputId, viewId) {
     updateSummary();
     if (picker.open) load(current);
   });
-  // Preserve required selection although hidden inputs have no native validation.
   input.form.addEventListener('submit', event => {
     if (!input.value) {
       event.preventDefault();
@@ -185,7 +182,6 @@ $('hidden').onclick = () => {
   $('path').dispatchEvent(new Event('input'));
 };
 
-// Dateibrowser navigation updates its picker as well as the underlying value.
 const folderResultBox = resultBox;
 resultBox = function(data, type) {
   if (type === 'browse') {

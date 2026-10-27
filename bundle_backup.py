@@ -1,4 +1,3 @@
-"""Gzip file backups with optional logical MySQL dump and rclone copy upload."""
 import hashlib
 import io
 import json
@@ -35,7 +34,6 @@ def validate(data):
 
 
 def database_dump(plan,path):
-    # The password is taken from the chosen database container, never from argv.
     script=('if [ "$1" = root ]; then export MYSQL_PWD="${MYSQL_ROOT_PASSWORD:-$MARIADB_ROOT_PASSWORD}"; '
             'else export MYSQL_PWD="${MYSQL_PASSWORD:-$MARIADB_PASSWORD}"; fi; '
             'if command -v mariadb-dump >/dev/null; then tool=mariadb-dump; else tool=mysqldump; fi; '
@@ -96,13 +94,12 @@ def run(plan):
     with tempfile.TemporaryDirectory(prefix='.serverlotse-bundle-',dir=plan['destination']) as work:
         dump=Path(work)/'database.sql'
         if plan.get('container'):database_dump(plan,dump)
-        # Invoke the original bounded file backup, not this gzip dispatcher.
         base={k:v for k,v in plan.items() if k!='bundle'}
         result=core.backup_run(base)
         source=Path(plan['destination'])/result['archive'];destination=source.with_suffix('.tar.gz')
         compressed_copy(source,destination,dump if plan.get('container') else None,plan.get('database',''))
         checked=core.verify_archive(plan,destination.name)
-        source.unlink()  # Only our verified intermediate, never user originals.
+        source.unlink()
         if dump.exists():dump.unlink()
         uploaded=None
         if plan.get('remote'):

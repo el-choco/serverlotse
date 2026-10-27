@@ -1,4 +1,3 @@
-/* Categories and guarded host controls. No power action runs on page load. */
 const nav=document.querySelector('nav');
 const categories=[
   ['Dateiverwaltung',['storage','compare','browse','largest','types','search','duplicates','copy_plan']],

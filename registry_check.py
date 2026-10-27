@@ -1,4 +1,3 @@
-"""Passive public OCI/Docker manifest comparison. No pull, login or credential export."""
 import hashlib
 import json
 import re

@@ -1,4 +1,3 @@
-/* Shared server-folder dialog. Paths remain in the selected read-only host view. */
 const folderCache=new Map(),folderRefreshers=[];
 async function folderListing(view,path){
   const key=view+'|'+path,existing=folderCache.get(key);

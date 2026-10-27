@@ -1,4 +1,3 @@
-/* Category landing pages and a persistent path back to the current workspace. */
 (() => {
   const crumb=el('div',undefined,'breadcrumbs');crumb.setAttribute('role','navigation');crumb.setAttribute('aria-label',t('Navigationspfad'));document.querySelector('header').after(crumb);
   const groups=[],titles=new Map();let active='overview';
@@ -20,7 +19,6 @@
     if(group?.id!==id){crumb.append(rawEl('span','/'),el('span',titles.get(id)||I18N.original($(id)?.querySelector('h1')?.textContent||id)));}
   }
   document.addEventListener('serverlotse:page',event=>render(event.detail));document.addEventListener('languagechange',()=>render(active));
-  // Status lines ending in an ellipsis ("Prüfung läuft …") describe running work; highlight them wherever they appear.
   const busyText=/(…|\.\.\.)\s*$/,busyCandidate=node=>node?.nodeType===Node.ELEMENT_NODE&&node.matches('main p,main .hint,#message')&&!node.closest('label,button,pre,dialog,.folder-picker');
   function markBusy(node){if(!busyCandidate(node))return;const text=node.textContent.trim();node.classList.toggle('is-busy',text.length>0&&text.length<160&&busyText.test(text));}
   new MutationObserver(records=>{for(const record of records){const target=record.target.nodeType===Node.TEXT_NODE?record.target.parentElement:record.target;markBusy(target);if(record.type==='childList')for(const node of record.addedNodes)if(node.nodeType===Node.ELEMENT_NODE){markBusy(node);node.querySelectorAll?.('p,.hint').forEach(markBusy);}}}).observe(document.body,{subtree:true,childList:true,characterData:true});

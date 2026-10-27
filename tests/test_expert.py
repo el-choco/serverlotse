@@ -1,4 +1,3 @@
-"""Only fixtures and mocked host/provider calls. Never change a real host."""
 import base64
 import contextlib
 import json
@@ -21,8 +20,6 @@ class ExpertTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.root=Path(self.tmp.name)
         self.state=patch.object(core,'STATE',self.root/'state');self.state.start();core.initialize()
-        # Host path validation is separately tested on POSIX. Keep these state
-        # machine tests portable and strictly inside this temporary directory.
         self.writer=patch.object(advanced,'atomic_write',side_effect=lambda path,data,mode:path.write_bytes(data));self.writer.start()
     def tearDown(self):self.writer.stop();self.state.stop();self.tmp.cleanup()
 

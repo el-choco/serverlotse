@@ -1,4 +1,3 @@
-"""Bounded Docker workbench. Fixed engine endpoints, no SDK or shell interpolation."""
 from collections import deque
 import copy
 import hashlib
@@ -141,8 +140,6 @@ def janitor_plan():
     images=api('GET','/images/json?all=true')
     by_id={row['Id']:row for row in images}
     protected_images=used|{row['Id'] for row in images if any('serverlotse' in tag.lower() for tag in row.get('RepoTags') or [])}
-    # Classic-builder parents may still back a retained image. Preserve that
-    # closure; for unused chains remove children first, never force a conflict.
     for value in list(protected_images):
         seen=set()
         while value in by_id and value not in seen:
@@ -161,7 +158,6 @@ def janitor_plan():
             'images':[{'id':r['Id'],'tags':sorted(r.get('RepoTags') or [])} for r in sorted(images,key=lambda r:(-depth(r['Id']),r['Id'])) if r['Id'] not in protected_images],
             'volumes':sorted(r['Name'] for r in volumes),
             'networks':sorted(r['Id'] for r in nets if r['Name'] not in {'bridge','host','none'} and 'serverlotse' not in r['Name'].lower() and not r.get('Containers') and (r.get('Labels') or {}).get('com.docker.compose.project') not in protected_projects)}
-    # Inspect custom networks: network-list responses do not reliably contain endpoints.
     result['networks']=[nid for nid in result['networks'] if not api('GET','/networks/'+nid).get('Containers')]
     if sum(len(v) for v in result.values())>500:raise ValueError('Zu viele Löschziele; zuerst einzelne Ressourcen bereinigen.')
     return result
@@ -173,7 +169,7 @@ def clone_spec(info,new_name,port=None,readonly=False,env_updates=None):
         raise ValueError('Privilegierte Container und geteilte Host-Namensräume werden hier nicht dupliziert oder ersetzt.')
     config=info['Config']
     result={key:copy.deepcopy(config[key]) for key in ['Image','Env','Cmd','Entrypoint','WorkingDir','User','ExposedPorts','Healthcheck','StopSignal','StopTimeout','Labels','Volumes'] if key in config}
-    result['Image']=info['Image']  # Use the immutable local image, never a changed tag.
+    result['Image']=info['Image']
     result['Hostname']=new_name
     if env_updates is None:
         result['Labels']={k:v for k,v in (result.get('Labels') or {}).items() if not k.startswith('com.docker.compose.')}
@@ -199,7 +195,6 @@ def clone_spec(info,new_name,port=None,readonly=False,env_updates=None):
             raise ValueError('Compose-Container über die .env-Datei ändern und anschließend Compose neu bereitstellen.')
         allowed=['Binds','Mounts','Tmpfs','PortBindings','RestartPolicy','NetworkMode','Memory','MemorySwap','NanoCpus','CpuQuota','CpuPeriod','CpusetCpus','PidsLimit','ShmSize','ReadonlyRootfs','Dns','DnsSearch','ExtraHosts','GroupAdd','Ulimits','CapAdd','CapDrop','SecurityOpt','LogConfig','Init']
         result['HostConfig']={k:copy.deepcopy(host[k]) for k in allowed if k in host}
-        # Bind anonymous volumes by name too; do not silently create an empty database.
         for mount in host.get('Mounts') or []:
             if mount.get('VolumeOptions') or mount.get('BindOptions',{}).get('NonRecursive'):
                 raise ValueError('Erweiterte Mount-Optionen über die ursprüngliche Container-Konfiguration bearbeiten.')
@@ -235,8 +230,6 @@ def dotenv(path):
 
 
 def dotenv_line(key,value):
-    # Double-quote escapes preserve trailing backslashes and quotes; $$ prevents
-    # Compose interpolation. Single-quoted trailing backslashes are ambiguous.
     return key+'='+json.dumps(value.replace('$','$$'),ensure_ascii=False)
 
 

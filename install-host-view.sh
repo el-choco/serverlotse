@@ -1,5 +1,4 @@
 #!/bin/sh
-# Install the existing read-only root-view helper for subsequent boots.
 set -eu
 [ "$(id -u)" = 0 ] || { echo 'Bitte mit sudo ausführen.'; exit 1; }
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

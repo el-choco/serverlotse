@@ -1,4 +1,3 @@
-"""Native proxy configuration with validation and rollback. No NPM API changes."""
 from pathlib import Path
 import secrets
 import admin_core as core
@@ -46,7 +45,6 @@ def nginx(plan):
     filename='serverlotse-'+plan['domain']+'.conf'
     available=Path('/etc/nginx/sites-available')/filename;enabled=Path('/etc/nginx/sites-enabled')/filename
     if available.exists() or available.is_symlink() or enabled.exists() or enabled.is_symlink():raise ValueError('Zieldatei existiert bereits.')
-    # Nginx needs traversal only to the dedicated ACME webroot, not private state.
     webroot=Path('/var/lib/serverlotse-acme');webroot.mkdir(mode=0o755,exist_ok=True);core.private_destination(webroot)
     created=False
     try:
@@ -62,7 +60,6 @@ def nginx(plan):
         hook=renewal/'serverlotse-nginx'
         if hook.exists() and not hook.read_text().startswith('#!/bin/sh\n# ServerLotse'):raise ValueError('Zertifikat aktiv, aber fremder Renewal-Hook wird nicht überschrieben.')
         advanced.atomic_write(hook,b'#!/bin/sh\n# ServerLotse\nnginx -t && systemctl reload nginx.service\n',0o755)
-        # Certbot's packaged timer handles renewal; expose a missing timer clearly.
         core.command(['systemctl','enable','--now','certbot.timer'])
     except Exception as exc:
         if created:

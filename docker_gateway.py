@@ -1,4 +1,3 @@
-"""Optional Docker reader. Exposes sanitized container summary and bounded logs only."""
 import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json

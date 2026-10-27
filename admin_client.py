@@ -1,4 +1,3 @@
-"""Container-to-host relay; only the private Unix socket is reachable."""
 import http.client
 import json
 import os

@@ -1,4 +1,3 @@
-"""No real root commands, service changes, deletions or messages in these tests."""
 import copy
 import hashlib
 import io

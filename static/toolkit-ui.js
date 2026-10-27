@@ -1,4 +1,3 @@
-/* Progressive enhancement: all tools share jobs, progress and result exports. */
 document.querySelector('header p')?.remove();
 document.querySelector('.section-heading')?.remove();
 const tools = [

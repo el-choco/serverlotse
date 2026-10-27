@@ -1,4 +1,3 @@
-/* One catalog for all languages. No tokens or credentials in browser storage. */
 const I18N = (() => {
   const supported = ['de','en','es'];
   let saved;

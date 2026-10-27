@@ -1,4 +1,3 @@
-# Dedicated write target only. Never point this mount at / or application data.
 services:
   serverlotse:
     environment:

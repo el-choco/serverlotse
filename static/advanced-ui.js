@@ -1,4 +1,3 @@
-/* User-approved administration. Installation never enables automation by itself. */
 (() => {
   const definitions=[
     ['shell-advanced','Root-Konsole','System','Interaktives Terminal direkt auf deinem Linux-Host.'],

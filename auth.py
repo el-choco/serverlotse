@@ -1,4 +1,3 @@
-"""Signed browser sessions. The environment token is never sent to the browser."""
 import hashlib
 import hmac
 from http.cookies import SimpleCookie, CookieError

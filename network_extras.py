@@ -1,4 +1,3 @@
-"""Opt-in DDNS and a DNS-to-existing-proxy assistant. No arbitrary provider URLs."""
 import ipaddress
 import json
 import re
@@ -181,7 +180,6 @@ def loop():
         time.sleep(60)
         try:tick()
         except Exception:
-            # A temporary database/read failure must not permanently stop the watcher.
             continue
 
 

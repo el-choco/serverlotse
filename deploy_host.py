@@ -1,4 +1,3 @@
-"""One-shot Docker bootstrap for the explicitly approved native root helper."""
 import http.client
 import json
 import os
@@ -79,7 +78,7 @@ def install(payload,root=Path('/'),runner=run,reader=request):
     if socket_path.exists() and token_path.exists():
         old_token=token_path.read_text().strip()
         status=reader(old_token,{'view':'status'})
-        unchanged=old_token==payload['token'] and status.get('terminal') and status.get('version')=='0.7.4'
+        unchanged=old_token==payload['token'] and status.get('terminal') and status.get('version')=='0.7.5'
         for name,text in payload['files'].items():
             relative=('etc/systemd/system/' if name.endswith('.service') else 'usr/local/lib/serverlotse/')+name
             path=safe_path(root,relative)
@@ -110,11 +109,11 @@ def install(payload,root=Path('/'),runner=run,reader=request):
         while True:
             try:
                 status=reader(payload['token'],{'view':'status'})
-                if status.get('terminal') and status.get('version')=='0.7.4':break
+                if status.get('terminal') and status.get('version')=='0.7.5':break
             except (OSError,ValueError,http.client.HTTPException):pass
             if time.monotonic()>deadline:raise ValueError('Host-Helfer startet nicht. journalctl -u serverlotse-admin.service -n 40 --no-pager prüfen.')
             time.sleep(.25)
-        print('Host-Helfer 0.7.4 und Systemansicht bereit. Kein manueller Installer nötig.',flush=True)
+        print('Host-Helfer 0.7.5 und Systemansicht bereit. Kein manueller Installer nötig.',flush=True)
     finally:
         if reserved:
             try:reader(payload['token'],{'view':'power_release'})

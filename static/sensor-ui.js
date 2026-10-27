@@ -1,4 +1,3 @@
-/* Read-only monitoring. No shell, deletion, firewall or process mutations. */
 (() => {
   const definitions=[
     ['live-sensors','Live-Monitoring','Monitoring','CPU, RAM, Temperaturen und Netzwerk im Verlauf.'],

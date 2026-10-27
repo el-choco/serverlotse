@@ -1,4 +1,3 @@
-"""Host workshop: bounded inspection and explicit, reversible administration."""
 import base64
 import contextlib
 import hashlib
@@ -72,7 +71,6 @@ def cron_rows():
             line=line.strip()
             if not line or line.startswith('#') or re.match(r'\w+\s*=',line):continue
             parts=line.split(None,6 if system else 5);count=1 if line.startswith('@') else 5
-            # @daily has fewer schedule fields than a normal crontab.
             pieces=line.split(None,count+(1 if system else 0))
             if len(pieces)<count+1+(1 if system else 0):continue
             command=pieces[-1]
@@ -109,7 +107,6 @@ def cron_schedule(value):
 
 
 def calendar_part(field,first='0',names=None):
-    # systemd OnCalendar: "a..b" for ranges, "start/step" for repetitions, names for weekdays.
     out=[]
     for part in field.split(','):
         base,slash,step=part.partition('/')
@@ -174,13 +171,11 @@ def validate_job(data):
 def create_job(p):
     name=p['name']
     if p['kind']=='cron':
-        # In crontab lines an unescaped % ends the command and feeds the rest to stdin.
         line=p['schedule']+' '+p['user']+' '+p['command'].replace('%','\\%')
         text='# Angelegt von ServerLotse. Entfernen über Cronjobs in ServerLotse.\nSHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n'+line+'\n'
         advanced.atomic_write(CRON_DIR/(JOB_PREFIX+name),text.encode(),0o644)
         return {'name':name,'note':'Cron-Eintrag angelegt. Cron übernimmt ihn automatisch: '+p['description']+'.'}
     timer,service,script=job_files(name,'systemd')
-    # The command lives in its own script so systemd's %-specifiers and quoting never reinterpret it.
     trigger='OnCalendar='+p['calendar']+'\nPersistent=true' if p['calendar'] else 'OnBootSec=1min'
     try:
         JOB_SCRIPTS.mkdir(mode=0o755,parents=True,exist_ok=True)
@@ -416,8 +411,6 @@ def apply(p):
     if op=='lab_apt_clean':
         fresh=apt_cleanup()
         if fresh['blocked'] or fresh['packages']!=p['packages']:raise ValueError('APT-Auswahl verändert. Neue Vorschau erstellen.')
-        # Keep kernel and access packages out of auto-removal even if another
-        # package manager changes auto flags between the check and APT's lock.
         protection='^(linux-|systemd|udev|dbus|openssh|dropbear|docker|containerd|runc|sudo|apt|dpkg|libc6|bash|coreutils|python3|network|ifupdown|iproute|dietpi|serverlotse)'
         text=core.command(['apt-get','--assume-yes','-o','APT::NeverAutoRemove::='+protection,'autoremove','--purge'],timeout=1800)
         core.command(['apt-get','clean'],timeout=120);return {'text':text,'packages':p['packages']}

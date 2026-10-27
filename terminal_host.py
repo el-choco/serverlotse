@@ -1,4 +1,3 @@
-"""Interactive Linux PTYs. No SSH, TCP listener, output history or command log."""
 import base64
 import os
 import secrets
@@ -86,7 +85,7 @@ class Session:
         with self.lock:
             if self.closed: return
             self.closed = True
-            try: os.close(self.master)  # Hang up controlling TTY, including foreground jobs.
+            try: os.close(self.master)
             except OSError: pass
             if self.process:
                 try: os.killpg(self.process.pid, signal.SIGHUP)
@@ -166,7 +165,6 @@ def request(data):
             if action == 'input':
                 raw = base64.b64decode(data.get('data', ''), validate=True)
                 if not 0 < len(raw) <= 4096: raise ValueError('Terminaleingabe zu groß.')
-                # Nonblocking, acknowledge actual bytes so the browser can retry the remainder.
                 try: count = os.write(session.master, raw)
                 except BlockingIOError: count = 0
                 session.active = now

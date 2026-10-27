@@ -1,4 +1,3 @@
-"""Large scans use temporary SQLite data, never real server data."""
 import json
 import os
 from pathlib import Path
@@ -78,7 +77,6 @@ class ScanIndexTests(unittest.TestCase):
         finally:index.close()
 
     def test_main_compose_keeps_readonly_host_and_only_read_search_capability(self):
-        # The real Compose parser is additionally checked during release validation.
         text=(Path(__file__).parents[1]/'compose.yaml').read_text(encoding='utf-8')
         main=text.split('\n  serverlotse:\n',1)[1].split('\n  docker-reader:',1)[0]
         self.assertIn('user: "0:0"',main);self.assertIn('- DAC_READ_SEARCH',main)

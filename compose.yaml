@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.bootstrap
-    image: serverlotse-bootstrap:0.7.4
+    image: serverlotse-bootstrap:0.7.5
     restart: "no"
     privileged: true
     pid: host
@@ -18,7 +18,7 @@ services:
 
   serverlotse:
     build: .
-    image: serverlotse:0.7.4
+    image: serverlotse:0.7.5
     user: "0:0"
     restart: unless-stopped
     depends_on:
@@ -85,7 +85,7 @@ services:
 
   docker-reader:
     build: .
-    image: serverlotse-reader:0.7.4
+    image: serverlotse-reader:0.7.5
     command: [python, docker_gateway.py]
     restart: unless-stopped
     volumes:
@@ -111,7 +111,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.control
-    image: serverlotse-control:0.7.4
+    image: serverlotse-control:0.7.5
     restart: unless-stopped
     environment:
       SERVERLOTSE_TOKEN: ${SERVERLOTSE_TOKEN:?Bitte Zugangsschlüssel in .env setzen}

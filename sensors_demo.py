@@ -1,4 +1,3 @@
-"""Fixtures for the read-only sensor UI. Never reads the host."""
 import math
 import time
 

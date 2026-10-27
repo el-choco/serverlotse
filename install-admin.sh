@@ -1,10 +1,8 @@
 #!/bin/sh
-# Install the root helper explicitly; the web container stays unprivileged.
 set -eu
 [ "$(id -u)" = 0 ] || { echo 'Bitte mit sudo ausführen.'; exit 1; }
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 command -v python3 >/dev/null || { echo 'Bitte zuerst python3 auf dem Host installieren.'; exit 1; }
-# Read .env as data, never source/evaluate it as a root shell script.
 python3 - "$script_dir" <<'PY'
 import os, pathlib, re, sys, socket, http.client, json
 root = pathlib.Path(sys.argv[1])

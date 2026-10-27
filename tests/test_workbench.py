@@ -1,4 +1,3 @@
-"""No Docker, host commands, registry traffic, notifications or speedtests are run."""
 import copy
 import io
 import json

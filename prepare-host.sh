@@ -1,5 +1,4 @@
 #!/bin/sh
-# Creates an unrecursive, read-only view of the host root filesystem.
 set -eu
 [ "$(id -u)" = 0 ] || { echo 'Bitte mit sudo ausführen.'; exit 1; }
 target=/run/serverlotse-system

@@ -1,4 +1,3 @@
-"""Structured Compose projects, bounded volume editing and isolated Trivy scans."""
 import base64
 import contextlib
 import hashlib
@@ -23,7 +22,6 @@ def volume(name):
     if not isinstance(name,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,199}',name):raise ValueError('Ungültiger Volume-Name.')
     row=docker.api('GET','/volumes/'+quote(name,safe=''));path=core.local_path(row['Mountpoint'])
     if row.get('Driver')!='local' or row.get('Options'):raise ValueError('Nur lokale Standard-Volumes ohne Treiberoptionen bearbeiten.')
-    # Control sockets and the tool's own data must never become an editor target.
     for container in docker.inventory():
         if docker.protected(container):
             info=docker.inspect(container['Id'],False)
@@ -212,7 +210,6 @@ def apply(p):
             state=current['identity'] if current else [0,0,0o640,parent.st_uid,parent.st_gid]
             with os.fdopen(stream,'wb') as file:
                 os.fchown(file.fileno(),state[3],state[4]);os.fchmod(file.fileno(),stat.S_IMODE(state[2]));file.write(payload);file.flush();os.fsync(file.fileno())
-            # O_EXCL + link prevents a concurrent new file from being overwritten.
             if current is None:os.link(name,parts[-1],src_dir_fd=fd,dst_dir_fd=fd,follow_symlinks=False)
             else:
                 check,_=existing_file(fd,parts[-1])

@@ -1,8 +1,3 @@
-"""Host administration with fixed operations, expiring previews and durable audit.
-
-Runs on Linux. Structured operations plus the explicitly approved root command console.
-The shared administrator token grants host-root capabilities.
-"""
 import contextlib
 import hashlib
 import ipaddress
@@ -37,14 +32,12 @@ LAB_OPS={'lab_janitor','lab_clone','lab_env','lab_template','lab_dotenv','lab_co
 LAB_OPS |= {'lab_cache','lab_apt_clean','lab_orphan_end','lab_panic','lab_panic_release','lab_config_write','lab_config_keep','lab_config_undo','lab_ddns_save','lab_ddns_update','lab_domain_proxy','lab_inode_watch','lab_builder','lab_volume_write','lab_trivy','lab_cron_create','lab_cron_remove'}
 OPS |= LAB_OPS
 ENV = {**os.environ, "LC_ALL": "C", "LANG": "C", "PATH": "/usr/sbin:/usr/bin:/sbin:/bin", "SYSTEMD_PAGER": "cat", "DEBIAN_FRONTEND": "noninteractive"}
-# Host UI actions and local engine inspection must never select a remote context.
 ENV['DOCKER_HOST']='unix:///var/run/docker.sock'
 for _docker_option in ('DOCKER_CONTEXT','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH'):
     ENV.pop(_docker_option,None)
 
 
 def command(args, timeout=25, input_text=None, allowed=(0,)):
-    """Bound output on disk, not a pipe that grows in memory. No shell."""
     with tempfile.TemporaryFile() as output:
         try:
             process = subprocess.Popen(args, stdin=subprocess.PIPE if input_text is not None else subprocess.DEVNULL,
@@ -67,7 +60,6 @@ def command(args, timeout=25, input_text=None, allowed=(0,)):
         if len(text) > 2_000_000:
             raise ValueError("Ausgabe zu groß. Prüfung auf dem Host erforderlich.")
         if process.returncode not in allowed:
-            # Password tools must not disclose their input even on failure.
             if input_text is not None:
                 raise ValueError("Benutzeraktion fehlgeschlagen. Host-Protokoll prüfen.")
             raise ValueError(text[-5000:] or "Host-Befehl fehlgeschlagen.")
@@ -144,7 +136,6 @@ def identity(path):
 
 
 def secure_open(path, flags):
-    """Walk every component with O_NOFOLLOW; retain directory fds until open."""
     path = Path(path)
     directory = os.open("/", os.O_RDONLY | os.O_DIRECTORY)
     try:
@@ -156,7 +147,6 @@ def secure_open(path, flags):
 
 
 def private_destination(path):
-    """Root-owned ancestors prevent another local user substituting restore paths."""
     for current in [path, *path.parents]:
         info = current.lstat()
         if not stat.S_ISDIR(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022:
@@ -206,7 +196,6 @@ def block_device(value):
 
 def smart(value):
     block_device(value)
-    # smartctl encodes health findings in exit bits; preserve the full JSON.
     text = command(["smartctl", "--json", "--all", value], timeout=45, allowed=tuple(range(256)))
     return json.loads(text)
 
@@ -317,7 +306,6 @@ def probe(host, port):
         lines = command(["getent", "--", "ahosts", host], timeout=8).splitlines()
         addresses = sorted({line.split()[0] for line in lines if line.split()})
     if not addresses: raise ValueError("DNS-Auflösung lieferte keine Adresse.")
-    # Local diagnostic reachability, no credentials or application payload sent.
     for address in addresses:
         if ipaddress.ip_address(address).is_multicast or ipaddress.ip_address(address).is_unspecified:
             raise ValueError("Diese Zieladresse ist nicht erlaubt.")
@@ -408,7 +396,6 @@ def backup_run(cfg):
     partial = final.with_suffix(".partial")
     manifest, count, skipped, manifest_size = {}, 0, 0, 0
     source_device = source.stat().st_dev
-    # Do not follow links; cross-filesystem directories are deliberately skipped.
     try:
         with partial.open("xb") as raw, tarfile.open(fileobj=raw, mode="w") as archive:
             source_fd = secure_open(source, os.O_RDONLY | os.O_DIRECTORY)
@@ -456,7 +443,6 @@ def backup_run(cfg):
             os.fsync(persisted.fileno())
         os.link(partial, final); partial.unlink()
     except Exception:
-        # Keep .partial for inspection; never present it as a complete archive.
         raise
     finally:
         if 'source_fd' in locals() and source_fd is not None: os.close(source_fd)
@@ -513,7 +499,6 @@ def verify_archive(cfg, name, restore=None):
 
 
 def validate(data):
-    """Normalize and resolve all subjects before they become an immutable plan."""
     if not isinstance(data, dict) or data.get("operation") not in OPS: raise ValueError("Unbekannte Verwaltungsaktion.")
     if data['operation'] in LAB_OPS:
         import workbench
@@ -527,7 +512,6 @@ def validate(data):
         name = data.get("name"); validate_service(name)
         verb = data.get("verb")
         if verb not in {"start", "stop", "restart", "enable", "disable"}: raise ValueError("Ungültige Dienstaktion.")
-        # Never strand a remote novice by disabling essential host infrastructure.
         protected = {"ssh.service", "sshd.service", "dropbear.service", "docker.service", "containerd.service", "dbus.service", "systemd-logind.service", "networking.service", "NetworkManager.service", "systemd-networkd.service"}
         if (name in protected or name.startswith(("serverlotse", "systemd-", "ssh@", "sshd@", "dropbear@"))) and verb != "start": raise ValueError("Dieser Zugangsdienst ist gegen Unterbrechungen geschützt.")
         p.update(name=name, verb=verb)
@@ -625,7 +609,6 @@ def validate(data):
 
 
 def busy_mount(path):
-    # A container's bind keeps the disk in use even when host umount might succeed.
     ids = command(["docker", "ps", "-aq"]).split() if shutil.which("docker") else []
     for offset in range(0, len(ids), 100):
         for item in json.loads(command(["docker", "inspect", *ids[offset:offset+100]])):
@@ -726,7 +709,6 @@ def apply_plan(p):
         return {"name": p["name"], "note": "Benutzer gespeichert. Kontosperre betrifft Passwortanmeldung; vorhandene SSH-Schlüssel können weiter gelten."}
     if op == "permissions":
         path = local_path(p["path"])
-        # dirfd protects final component from symlink substitution.
         fd = secure_open(path, os.O_RDONLY | os.O_NONBLOCK)
         try:
             info = os.fstat(fd)
@@ -756,7 +738,6 @@ def apply_plan(p):
     if op == "backup_restore":
         target = local_path(p["target"])
         if identity(target) != p["target_identity"]: raise ValueError("Ziel verändert. Neue Vorschau erforderlich.")
-        # Verify first, then extract manually into an exclusively created directory.
         verify_archive(cfg, p["archive"])
         restore = target / ("serverlotse-restore-" + secrets.token_hex(12))
         restore.mkdir(mode=0o700)
@@ -767,7 +748,6 @@ def apply_plan(p):
 def worker(ident, plan):
     with db() as connection: connection.execute("UPDATE audit SET status='running' WHERE id=?", (ident,))
     try:
-        # Revalidate immediately before mutation; changes invalidate the preview.
         current = validate(plan)
         if current != plan: raise ValueError("Zustand verändert. Neue Vorschau erforderlich.")
         result = apply_plan(plan)
@@ -813,7 +793,6 @@ def schedule_tick():
     if POWER_UNTIL > time.time(): return
     for cfg in backup_configs()["rows"]:
         if cfg["enabled"] and cfg["next_run"] <= time.time():
-            # Reserve the next slot first; a failure is visible, not a tight retry loop.
             with db() as connection: connection.execute("UPDATE backups SET next_run=? WHERE id=?", (time.time()+cfg["hours"]*3600, cfg["id"]))
             try:
                 plan = validate({"operation": "backup_run", "id": cfg["id"]})
@@ -856,7 +835,7 @@ def read(data):
                 connection.execute("INSERT INTO audit VALUES (?,?,?,?,?,?)", (ident,time.time(),data["action"],json.dumps(parameters),data["status"],str(data.get("result", ""))[:4000]))
         return {"id":ident}
     if action == "status":
-        return {"enabled": True, "version": "0.7.4", "sensors": True, "advanced": True, "terminal": True, "workbench": True, "terminal_sessions": __import__("terminal_host").count(), "busy": MUTEX.locked(), "hostname": socket.gethostname(), "tools": {name: bool(shutil.which(name)) for name in ["apt-get", "systemctl", "lsblk", "smartctl", "getfacl", "docker", "ip", "ss", "useradd", "chpasswd"]}}
+        return {"enabled": True, "version": "0.7.5", "sensors": True, "advanced": True, "terminal": True, "workbench": True, "terminal_sessions": __import__("terminal_host").count(), "busy": MUTEX.locked(), "hostname": socket.gethostname(), "tools": {name: bool(shutil.which(name)) for name in ["apt-get", "systemctl", "lsblk", "smartctl", "getfacl", "docker", "ip", "ss", "useradd", "chpasswd"]}}
     if action == "health": return system_snapshot()
     if action == "services": return services()
     if action == "service": return service_details(data.get("name"))

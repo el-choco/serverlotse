@@ -1,4 +1,3 @@
-"""ServerLotse: Linux diagnostics and delegated host administration."""
 import hashlib
 import hmac
 import json
@@ -29,7 +28,7 @@ DEMO = os.getenv("SERVERLOTSE_DEMO", "0") == "1"
 JOBS = {}
 LOCK = threading.Lock()
 POOL = ThreadPoolExecutor(max_workers=1)
-MAX_FILES = None  # Metadata is stored on disk, not limited by an in-memory dictionary.
+MAX_FILES = None
 CONTEXT = threading.local()
 HOST_POWER_UNTIL = 0
 ACTIONS = {"scan", "compare", "browse", "largest", "types", "search", "duplicates", "system", "mounts", "log", "docker", "docker_logs", "checklist", "copy_plan", "copy_apply"}
@@ -91,8 +90,6 @@ def resolve_path(view, value):
         raise ValueError("Bitte einen absoluten Linux-Pfad ohne .. verwenden.")
     base = ROOTS[view].resolve()
     target = base.joinpath(*p.parts[1:])
-    # Reject all symbolic links, including parent components. Absolute host links
-    # must never resolve against the container's own root.
     current = base
     for part in p.parts[1:]:
         current /= part
@@ -123,7 +120,6 @@ def inventory(root):
                         if seen%250==0:checkpoint(f"{seen:,} Einträge untersucht")
                         if seen%5000==0:files.check_space()
                         try:
-                            # Windows DirEntry.stat may report st_dev/st_ino as zero.
                             info = os.stat(entry.path, follow_symlinks=False) if os.name == "nt" else entry.stat(follow_symlinks=False)
                             if stat.S_ISLNK(info.st_mode) or info.st_dev != device:
                                 skipped += 1
@@ -298,7 +294,7 @@ def demo_tool(data):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "ServerLotse/0.7.4"
+    server_version = "ServerLotse/0.7.5"
 
     def setup(self):
         super().setup()
@@ -402,8 +398,6 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         global HOST_POWER_UNTIL
         path = urlsplit(self.path).path
-        # Consume bounded bodies before returning, including forbidden/logout
-        # requests. Closing with unread body data can reset TCP on Windows.
         try:
             length = int(self.headers.get("Content-Length", "0"))
             if not 0 <= length <= 524288:

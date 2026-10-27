@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.7.5 – Quelltext bereinigt
+
+- Kommentare und Docstrings aus Python, JavaScript, CSS, Shell-Skripten, Compose-,
+  Docker- und Konfigurationsdateien entfernt; Drittanbieterdateien unter static/vendor unverändert.
+- Keine Funktionsänderung gegenüber 0.7.4; bestehende .env behalten.
+
 ## 0.7.4 – Öffentliche und interne Dateien getrennt
 
 - .gitignore: interne Notizen (IDEAS.md, VALIDATION-*.md) sowie ZIP- und Prüfsummendateien
@@ -39,7 +45,7 @@
 - Paket-Wartung erklärt Ergebnis und geschützte Pakete verständlich statt als JSON;
   Log-Wartung-Tabelle wieder gut lesbar.
 - Versionssprung nur von 0.7.1 auf 0.7.2; bestehende .env behalten.
-- 199 lokale Tests: 195 bestanden, vier Plattform-Skips; großer künstlicher Bestand mit 250.005 Einträgen und Live-Radar im Browser geprüft. Details in VALIDATION-0.7.2.md.
+- 199 lokale Tests: 195 bestanden, vier Plattform-Skips; großer synthetischer Testbestand mit 250.005 Einträgen und Live-Radar im Browser geprüft. Details in VALIDATION-0.7.2.md.
 
 ## 0.7.1 – Oberfläche und Server-Werkstatt
 

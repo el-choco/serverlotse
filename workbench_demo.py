@@ -1,4 +1,3 @@
-"""Clearly marked local fixtures only. No host or network imports."""
 import math
 import time
 

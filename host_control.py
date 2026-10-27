@@ -1,4 +1,3 @@
-"""Internal authenticated relay for scheduled reboot/poweroff via host logind."""
 import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json

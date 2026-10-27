@@ -1,4 +1,3 @@
-/* Extended tools reuse the existing authenticated preview/confirmation/audit flow. */
 (() => {
   const definitions=[
     ['radar-lab','Container-Radar','Docker','Ressourcenverlauf, Laufzeit, Healthchecks und passive Image-Updateprüfung.'],
@@ -172,7 +171,6 @@
     p.output.replaceChildren(panel('Ergebnis',el('p','Aufgabe läuft …')));
     (async()=>{for(let i=0;i<1200;i++){await new Promise(resolve=>setTimeout(resolve,2000));try{const job=await read({view:'audit_detail',id:event.detail.id});if(['queued','running'].includes(job.status))continue;let result=job.result;try{result=JSON.parse(result);}catch{}p.output.replaceChildren(panel(job.status==='done'?'Abgeschlossen':'Fehlgeschlagen',pre(result)));return;}catch(e){p.output.replaceChildren(el('p',e.message));return;}}})();
   });
-  // Surface existing tools rather than duplicate their implementation.
   document.getElementById('clean-advanced')?.append(button('Erweiterten Janitor öffnen',()=>open('janitor-lab')));
   const dashboard=panel('Zertifikate und SSD-Zustand',el('p','Zuletzt geprüfte lokale Werte. Öffnen aktualisiert die jeweilige Diagnose.','hint'),button('Zertifikate prüfen',()=>open('certificates-lab')),button('SSD-Verschleiß prüfen',()=>open('wear-lab'))),summary=el('div');dashboard.append(summary);$('overview').querySelector('.explanation').before(dashboard);
   async function refreshSummary(){try{const data=await read({view:'lab_summary'});summary.replaceChildren(table(['Zertifikat','Resttage'],data.certificates.map(row=>[row.subject,row.days])),table(['Datenträger','Geschätzte Endurance übrig'],data.disks.map(row=>[row.path,row.remaining===null?t('Unbekannt'):row.remaining+' %'])));}catch{}}

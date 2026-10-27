@@ -1,4 +1,3 @@
-/* Local xterm.js renderer; short authenticated requests work through existing proxies. */
 (() => {
   let current=null,demoTerminal=null,demoObserver=null;
   const rpc=data=>api('terminal',data);
@@ -73,7 +72,6 @@
       };
       term.onData(text=>enqueue(new TextEncoder().encode(text)));
       term.onBinary(text=>enqueue(Uint8Array.from(text,c=>c.charCodeAt(0)&255)));
-      // Never read or write the browser clipboard via terminal control sequences.
       term.parser.registerOscHandler(52,()=>true);
       term.focus();poll(s);
     }catch(e){if(current)await stop();startButton.disabled=false;throw e;}
@@ -86,7 +84,7 @@
       const term=new Terminal({disableStdin:true,fontSize:15,theme:{background:'#071418',foreground:'#e5f4ef'}}),fit=new FitAddon.FitAddon();
       term.loadAddon(fit);term.open(container);fitTerminal(term,fit);
       demoTerminal=term;demoObserver=new ResizeObserver(()=>{if(container.getClientRects().length)fitTerminal(term,fit);});demoObserver.observe(container);
-      term.writeln('\x1b[1;36mServerLotse 0.7.4 · DEMO\x1b[0m\r\n');
+      term.writeln('\x1b[1;36mServerLotse 0.7.5 · DEMO\x1b[0m\r\n');
       term.writeln(t('Echte Host-Shell mit nano, htop und DietPi-Menüs. Keine SSH-Verbindung erforderlich.'));
       term.writeln('\r\n\x1b[32mroot@DietPi\x1b[0m:~# \x1b[90m'+t('Demo: keine Eingabe')+'\x1b[0m');
       return;
@@ -104,6 +102,5 @@
   window.addEventListener('pagehide',()=>{
     if(current?.id){fetch('/api/terminal',{method:'POST',credentials:'same-origin',keepalive:true,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify({action:'close',id:current.id})}).catch(()=>{});}
   });
-  // Logout removes the page. No terminal identifier is persisted in browser storage.
   window.ServerLotseTerminal={render,stop};
 })();

@@ -1,4 +1,3 @@
-"""Opt-in recovery copies to a dedicated writable mount; never overwrite."""
 import hashlib
 import os
 from pathlib import Path, PurePosixPath
@@ -85,7 +84,6 @@ def run(core, data):
                 core.checkpoint(f"Kopiere und prüfe {count + 1}/{len(plan['files'])}: {row['name']}")
                 parts = Path(row["name"]).parts
                 src_parent = os.dup(source_fd)
-                # Descend using descriptors; never resolve an attacker-replaced symlink.
                 try:
                     for part in parts[:-1]:
                         child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=src_parent)

@@ -1,4 +1,3 @@
-"""Root host helper, authenticated HTTP over a Unix socket, no TCP listener."""
 import hmac
 import json
 import os
@@ -20,7 +19,7 @@ READ_LIMIT = threading.BoundedSemaphore(3)
 
 
 class Handler(BaseHTTPRequestHandler):
-    def log_message(self, *args): pass  # Never log request bodies or secrets.
+    def log_message(self, *args): pass
     def setup(self):
         super().setup(); self.connection.settimeout(15)
     def reply(self, status, data):
@@ -54,7 +53,7 @@ def scheduler():
     while True:
         time.sleep(30)
         try: core.schedule_tick()
-        except Exception: pass  # Durable per-job errors are recorded by schedule_tick.
+        except Exception: pass
 
 
 if __name__ == "__main__":

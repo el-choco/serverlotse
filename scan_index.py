@@ -1,4 +1,3 @@
-"""Disposable disk-backed metadata index for large read-only scans."""
 import os
 from pathlib import Path
 import shutil

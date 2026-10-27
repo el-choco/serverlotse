@@ -1,4 +1,3 @@
-/* Line icons for navigation, category cards and folder dialogs. Inline SVG keeps the strict CSP intact. */
 const ServerLotseIcons = (() => {
   const paths = {
     grid:'M4 4h6v6H4zM14 4h6v6h-6zM14 14h6v6h-6zM4 14h6v6H4z',
@@ -100,7 +99,6 @@ const ServerLotseIcons = (() => {
     svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');svg.setAttribute('class',cls);
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',paths[name]||paths.chevron);svg.append(path);return svg;
   }
-  // Older labels carry a text symbol in front ("◎ Systemdiagnose"); replace it with the SVG and keep the translated label.
   function stripGlyph(node) {
     for (const child of [...node.childNodes]) {
       if (child.nodeType !== Node.TEXT_NODE || !glyph.test(child.textContent)) continue;

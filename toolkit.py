@@ -1,4 +1,3 @@
-"""Bounded diagnostic tools. No shell execution or automatic cleanup."""
 from collections import Counter, defaultdict
 import fnmatch
 import hashlib
@@ -11,7 +10,7 @@ import stat
 import time
 from urllib.request import urlopen
 
-VERSION = "0.7.4"
+VERSION = "0.7.5"
 
 
 def folders(core, view, path):

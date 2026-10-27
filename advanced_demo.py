@@ -1,4 +1,3 @@
-"""New administration views are fixtures only; all execution remains blocked."""
 def read(data):
     view=data['view']
     if view=='advanced_settings':return {'enabled':False,'notify_cpu':True,'notify_ram':True,'notify_ssh':False,'cpu':90,'ram':90,'hold_seconds':60,'cooldown_minutes':15,'ssh_failures':10,'webhook_kind':'discord','heal_containers':[],'heal_services':[],'janitor':False,'janitor_hour':3,'rclone_config':''}

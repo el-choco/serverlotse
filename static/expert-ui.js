@@ -1,4 +1,3 @@
-/* Workshop additions use the same authenticated preview, job and audit flow. */
 (() => {
   const definitions=[
     ['emergency-expert','Notfallbremse','Sicherheit','Zeitlich begrenzte Netzwerksperre mit automatischer Freigabe.'],

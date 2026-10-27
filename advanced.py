@@ -1,9 +1,3 @@
-"""Explicitly user-approved host operations, always through expiring previews.
-
-The user approved free root commands, targeted deletion, firewall/proxy changes,
-opt-in automation, webhooks and database/remote backups on 2026-10-25.
-No feature is enabled or executed merely by installing this module.
-"""
 import configparser
 import copy
 import hashlib

@@ -1,4 +1,3 @@
-"""Disposable, network-isolated MySQL/MariaDB restore tests. No live DB import."""
 import json
 import os
 from pathlib import Path
@@ -34,7 +33,6 @@ def apply(plan):
     cfg=core.config(plan['id']);checked=core.verify_archive(cfg,plan['archive'])
     archive=core.archive_file(cfg,plan['archive']);name='serverlotse-restore-test-'+secrets.token_hex(8)
     created=None
-    # Temporary dump lives beside the selected archive, not accidentally on root SSD.
     with tempfile.TemporaryDirectory(prefix='.serverlotse-sql-test-',dir=archive.parent) as temp:
         sql=Path(temp)/'restore.sql';found=False
         with tarfile.open(archive,'r:*') as tar:
@@ -78,7 +76,6 @@ def apply(plan):
                 'note':'Manifest und tatsächlicher SQL-Import in isolierter Wegwerf-Datenbank geprüft. Keine App-Funktionsprüfung oder Garantie eines konsistenten gemeinsamen Datei-/DB-Snapshots.'}
         finally:
             if created:
-                # Delete only the exact freshly created test ID, including its anonymous DB volume.
                 try:
                     info=docker_tools.inspect(created,False)
                     if (info.get('Config',{}).get('Labels') or {}).get('serverlotse.restore-test')!='true':raise ValueError('Testlabel verändert.')

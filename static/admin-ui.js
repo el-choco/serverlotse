@@ -1,4 +1,3 @@
-/* Fixed host operations only. Previews never execute changes. */
 (() => {
   const sections = [
     ['health-admin','Systemzustand','System','Last, Arbeitsspeicher, Speicherwarnungen und geführte Fehlerdiagnose.'],
@@ -40,7 +39,6 @@
     const button=el('button',name);button.dataset.page=id;button.onclick=()=>{page(id);load(id);};
     const group=groupFor(category);group.dataset.pages=[group.dataset.pages,id].filter(Boolean).join(',');group.append(button);
   }
-  // Move existing tools to the relevant new categories.
   for(const [id,category]of [['storage','Speicher'],['mounts','Speicher'],['docker','Docker'],['copy_plan','Dateiverwaltung']]){
     const button=navigation.querySelector('[data-page="'+id+'"]');if(button){for(const group of groups.values())group.dataset.pages=group.dataset.pages.split(',').filter(x=>x!==id).join(',');const group=groupFor(category);group.append(button);group.dataset.pages+=','+id;}
   }
@@ -50,7 +48,7 @@
     if(!group){group=el('details',undefined,'dashboard-category');group.append(el('summary',category),el('div',undefined,'tools'));$('overview').querySelector('.explanation').before(group);dashboardGroups.set(category,group);}
     const card=el('button',undefined,'tool');card.append(el('h3',name),el('p',description),el('strong','Werkzeug öffnen →'));card.onclick=()=>{page(id);load(id);};group.querySelector('.tools').append(card);
   }
-  const version=document.querySelector('.sidebar-bottom small');I18N.bind(version,'VERSION 0.7.4 · WERKZEUGKISTE');
+  const version=document.querySelector('.sidebar-bottom small');I18N.bind(version,'VERSION 0.7.5 · WERKZEUGKISTE');
   const explanation=document.querySelector('.explanation p');I18N.bind(explanation,'Diagnose und Verwaltung an einem Ort. Änderungen werden vorab angezeigt und dauerhaft protokolliert.');
   const overviewPanel=el('section',undefined,'panel admin-overview');overviewPanel.append(el('h2','Systemzustand und Diagnose'));
   const statusOverview=el('p','Host-Verwaltung wird geprüft …');overviewPanel.append(statusOverview);

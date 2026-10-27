@@ -1,4 +1,3 @@
-"""Clearly labelled fixtures. No host action is available in demo mode."""
 import time
 
 

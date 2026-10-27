@@ -4,7 +4,6 @@
 .remember-session{display:flex;align-items:center;gap:9px;margin-top:15px;font-size:12px}.remember-session input{width:16px;height:16px;margin:0;flex:0 0 16px}.language-switch select{margin:0;min-width:145px;font-size:12px;padding:10px}.language-switch{flex-shrink:0}header .pill{white-space:nowrap}@media(max-width:900px){header{flex-wrap:wrap}.language-switch{margin-left:auto}}
 .fields select,.fields input:not([type=hidden]){height:48px;min-height:48px;box-sizing:border-box;padding:10px 12px;font-size:14px;line-height:normal}.server-folder-select{width:100%;margin-top:8px}.folder-select-error:not(:empty){display:block;margin-top:7px;font-size:11px;color:#9e5b28}.nav-category{margin:12px 0}.nav-category>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;padding:12px;color:#aac4c8;font-size:12px;font-weight:600;letter-spacing:.5px}.nav-category>summary::-webkit-details-marker{display:none}.nav-category>summary::after{content:'⌄'}.nav-category[open]>summary::after{transform:rotate(180deg)}.nav-category>button{padding-left:22px}.power-panel{margin:22px 0;padding:20px 24px;border:1px solid #dce5e7;border-radius:12px;background:white}.power-panel h2{font-size:17px;margin:0}.danger{background:#a9403b;color:#fff;border:1px solid #a9403b;border-radius:7px;padding:12px 18px;font-size:13px;font-weight:600}.danger:disabled{opacity:.5}.power-dialog{border:1px solid #d7e3e0;border-radius:14px;padding:28px;max-width:530px;width:calc(100vw - 32px);color:#26464d}.power-dialog::backdrop{background:#102b3099}.power-dialog h2{margin-top:0;font-size:22px}.power-dialog .power-host{font-family:ui-monospace,monospace;background:#eef4f3;padding:10px;border-radius:6px}.power-dialog input{font-family:ui-monospace,monospace}.power-dialog p[role=status]{font-size:12px}.sidebar-bottom{padding-top:12px}@media(max-width:700px){aside nav{display:block;max-height:230px}.power-panel{padding:18px}.power-dialog{padding:22px}}
 .dashboard-category{border:1px solid #dce5e7;border-radius:12px;background:#fff;margin:20px 0;padding:0 22px 20px}.dashboard-category>summary{cursor:pointer;font-weight:600;font-size:18px;padding:20px 0 0;color:#254d51}.dashboard-category:not([open]){padding-bottom:20px}.dashboard-category>.tools{margin-top:20px}.dashboard-category .tool{border-color:#e5eceb}
-/* Administration: readable forms, wrapping controls and long host output. */
 .admin-help { margin: 1rem 0; padding: 1rem; border: 1px solid #dce6e9; border-radius: 12px; }
 .admin-help summary { cursor: pointer; font-weight: 600; }
 .admin-check { display: flex; align-items: center; gap: .6rem; }
@@ -36,20 +35,17 @@
 .advanced-page .panel { margin:20px 0; }
 .advanced-page textarea { width:100%; min-height:120px; padding:12px; border:1px solid #cbdcdf; border-radius:7px; margin-top:8px; font:14px ui-monospace,monospace; }
 .advanced-page pre { padding:16px; border:1px solid #dfe8e8; border-radius:8px; background:#fff; }
-/* Interactive host terminal */
 .host-terminal{height:560px;min-height:240px;width:100%;background:#071418;padding:12px;border-radius:10px;overflow:hidden;resize:vertical;box-sizing:border-box}
 .host-terminal:fullscreen{height:100vh;width:100vw;border-radius:0}
 .host-terminal .xterm{height:100%}
 .host-terminal .xterm-viewport{border-radius:0}
 #shell-advanced .panel>button{margin:0 8px 10px 0}
-/* Workbench charts retain readable tables as an alternative to the canvas. */
 .lab-page[hidden]{display:none!important}
 .lab-page canvas{display:block;width:100%;height:auto;max-width:100%;background:#fff;border-radius:10px}
 .lab-page .panel{margin-top:20px}
 .lab-page .panel>button,.lab-page .panel>a{margin:8px 10px 8px 0}
 .lab-page td{white-space:pre-line;overflow-wrap:anywhere}
 .lab-page .fields textarea{width:100%;min-height:110px;box-sizing:border-box}
-/* Consistent spacing and output surfaces, including dynamically created tools. */
 .page .panel>.fields{margin-bottom:18px}
 .page .panel>button{margin-top:14px;margin-right:10px;margin-bottom:0}
 .page .panel>.fields+button{margin-top:0}
@@ -121,13 +117,11 @@
 .server-folder-button{font-size:14px;line-height:normal}
 @media(max-width:700px){.folder-path-row{flex-wrap:wrap}.folder-path-row label{flex-basis:100%}.network-interface{grid-template-columns:1fr auto auto;gap:8px}.network-interface span{font-size:11px}}
 
-/* Design layer 0.7.2: shared tokens, calmer surfaces and consistent interaction states. */
 :root{--sl-ink:#16292d;--sl-text:#3d5459;--sl-muted:#6b8085;--sl-line:#e3e9eb;--sl-line-strong:#d2dcdf;--sl-bg:#f3f6f7;--sl-surface:#fff;--sl-soft:#f7fafa;--sl-accent:#127a6f;--sl-accent-hover:#0e6a60;--sl-accent-soft:#e7f4f1;--sl-side:#0f2629;--sl-side-2:#132f33;--sl-radius:12px;--sl-shadow:0 1px 2px #0f262908,0 2px 8px #0f26290a;--sl-shadow-hover:0 4px 10px #0f26290f,0 12px 28px #0f262912;font-family:"Segoe UI Variable Text","Segoe UI",Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;color:var(--sl-ink)}
 body{background:var(--sl-bg)}
 ::selection{background:#bfe5dd}
 *{scrollbar-width:thin;scrollbar-color:#c3d0d3 transparent}
 aside *{scrollbar-color:#2f5156 transparent}
-/* Sidebar */
 aside{background:linear-gradient(180deg,var(--sl-side) 0%,var(--sl-side-2) 100%);border-right:1px solid #0a1d20;padding:28px 16px 18px}
 .brand{padding:0 8px;gap:12px}.brand span{font-size:21px;letter-spacing:-.5px}.brand small{font-size:8px;letter-spacing:1.3px;white-space:nowrap;color:#7fa0a5;margin-top:5px}
 aside .nav-label{margin:30px 10px 10px;font-size:10px;font-weight:600;letter-spacing:1.4px;color:#5f8489}
@@ -144,7 +138,6 @@ aside nav button.selected::before{content:'';position:absolute;left:0;top:8px;bo
 .nav-category>button{padding-left:24px;font-size:13px}
 aside .sidebar-bottom{border-top:1px solid #ffffff12;margin-top:10px;padding:14px 10px 0}
 aside .sidebar-bottom small{color:#58797e;font-size:9.5px}
-/* Header and page head */
 main{padding:0 44px 60px}
 header{position:sticky;top:0;z-index:30;background:#f3f6f7e6;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:18px 0;margin-bottom:26px;border-bottom:1px solid var(--sl-line)}
 .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:1.6px;color:var(--sl-accent)}
@@ -157,13 +150,11 @@ h1{font-size:32px;font-weight:700;letter-spacing:-1px;line-height:1.15;margin:10
 .page>p,.title-row p{font-size:14.5px;color:var(--sl-muted);max-width:760px}
 p{color:var(--sl-text)}
 .hint{color:var(--sl-muted)}
-/* Breadcrumbs */
 .breadcrumbs{margin:-6px 0 22px;gap:6px;font-size:12.5px}
 .breadcrumbs button{padding:4px 9px;border-radius:6px;color:var(--sl-accent);text-decoration:none;font-weight:500;transition:background .15s}
 .breadcrumbs button:hover{background:var(--sl-accent-soft)}
 .breadcrumbs>span{color:#a2b3b6}
 .breadcrumbs>span:last-child{color:var(--sl-ink);font-weight:600;padding:4px 2px}
-/* Surfaces */
 .card,.panel,.tool,.result,.power-panel,.sensor-card,.sensor-chart,.dashboard-category,.traffic-flow,#access,.page .table-scroll,.page[id$="-admin"] .table-scroll,.sensor-page .table-scroll{background:var(--sl-surface);border:1px solid var(--sl-line);border-radius:var(--sl-radius);box-shadow:var(--sl-shadow)}
 .panel{padding:26px}
 .card{padding:24px;transition:box-shadow .2s}
@@ -183,7 +174,6 @@ p{color:var(--sl-text)}
 .tool strong{font-weight:600;color:var(--sl-accent)}
 .section-heading h2{font-size:19px;font-weight:700}
 .explanation{background:linear-gradient(135deg,#eef7f4,#f4f9f8);border-color:#d6e9e3}
-/* Collapsible blocks: dashboard categories and help boxes */
 .dashboard-category{padding:0 22px;margin:14px 0;transition:box-shadow .2s}
 .dashboard-category:hover{box-shadow:var(--sl-shadow-hover)}
 .dashboard-category>summary,.admin-help>summary,.network-virtual>summary{list-style:none;display:flex;align-items:center;gap:10px}
@@ -198,7 +188,6 @@ p{color:var(--sl-text)}
 .admin-help>summary{padding:14px 0;font-size:14px;color:var(--sl-ink)}
 .admin-help[open]{padding-bottom:6px}
 .admin-help>p{margin-top:0}
-/* Forms */
 label{font-size:12px;font-weight:600;color:#4a6268;letter-spacing:.1px}
 input,select,textarea,.server-folder-button,.folder-picker>summary{border-color:var(--sl-line-strong);border-radius:8px;transition:border-color .15s,box-shadow .15s;color:var(--sl-ink)}
 input:hover,select:hover,textarea:hover,.server-folder-button:hover{border-color:#aebfc3}
@@ -206,7 +195,6 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:#2a9384;box-shado
 input[type=checkbox],input[type=radio]{accent-color:var(--sl-accent);box-shadow:none}
 select{appearance:none;-webkit-appearance:none;padding-right:38px!important;background-color:#fff;background-image:linear-gradient(45deg,transparent 50%,#127a6f 50%),linear-gradient(135deg,#127a6f 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
 .fields{gap:18px 22px}
-/* Buttons */
 .primary,.secondary,.danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;line-height:1.2;transition:background .15s,border-color .15s,box-shadow .15s,transform .05s}
 .primary{background:var(--sl-accent);box-shadow:0 1px 2px #0f262926,inset 0 1px 0 #ffffff1f}
 .primary:hover:not(:disabled){background:var(--sl-accent-hover)}
@@ -218,20 +206,17 @@ select{appearance:none;-webkit-appearance:none;padding-right:38px!important;back
 button:disabled{cursor:not-allowed}
 .link-button,.result-actions>a,.page .panel>a{color:var(--sl-accent);font-weight:500;text-decoration:none;border-bottom:1px solid #12796f55}
 .link-button:hover,.result-actions>a:hover,.page .panel>a:hover{border-bottom-color:var(--sl-accent)}
-/* Tables */
 .result table th,.page .table-scroll th,.page[id$="-admin"] th,.sensor-page th,.admin-dialog th{background:#f6f9f9;color:#5a7177;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;border-bottom:1px solid var(--sl-line);position:sticky;top:0;z-index:1}
 .result td,.page .table-scroll td,.page[id$="-admin"] td,.sensor-page td{border-bottom-color:#edf1f2}
 .page .table-scroll tbody tr:hover td,.result tbody tr:hover td{background:#f8fbfb}
 .page .console-table tbody tr:hover td{background:#163539}
 .page .console-table th{background:#17383d;color:#cfe5e0}
-/* Messages and status */
 #message:not(:empty){background:#fff7e8;border:1px solid #f1dcb4;color:#6d4b14;border-radius:10px}
 .warning-text{color:#a3591a}
 .finding{background:#fff8ec;border-left:3px solid #d29a3e;border-radius:0 8px 8px 0}
 .pending{background:var(--sl-accent-soft);border:1px solid #cfe7e0}
 .summary span{background:var(--sl-soft);border:1px solid var(--sl-line);border-radius:8px}
 .page pre,.result pre,.sensor-output{background:#0f2427;border-color:#1e3c40;color:#d4ece6;border-radius:10px}
-/* Monitoring */
 .sensor-card h2,.sensor-chart h2{font-size:15px;font-weight:650;color:var(--sl-ink)}
 .temperature-tile{background:linear-gradient(180deg,#f5fbf9,#eef7f4);border-color:#d8ebe5}
 .temperature-tile>span{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#5d7b78}
@@ -239,7 +224,6 @@ button:disabled{cursor:not-allowed}
 .network-interface{padding:11px 4px}
 .network-interface>span{font-variant-numeric:tabular-nums;font-size:12.5px}
 .network-virtual>summary{font-weight:600}
-/* Dialogs */
 .admin-dialog,.power-dialog{border-color:var(--sl-line);border-radius:16px;box-shadow:0 24px 70px #0f262940}
 .admin-dialog::backdrop,.power-dialog::backdrop{background:#0f2629a6;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .folder-directory{transition:background .12s}
@@ -247,7 +231,6 @@ button:disabled{cursor:not-allowed}
 .folder-breadcrumbs button:hover,.folder-crumb:hover{background:#dcefea}
 @media(max-width:1100px){main{padding:0 24px 40px}}
 @media(max-width:700px){aside{padding:18px 14px}aside nav button.selected::before{display:none}header{position:static}main{padding:0 16px 32px}h1{font-size:26px}.panel{padding:20px}.title-row .secondary{display:inline-block;min-width:44px}}
-/* Icons, tree navigation and busy states (0.7.2). */
 svg.icon,svg.nav-icon,svg.nav-chevron{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 aside nav button svg.nav-icon{width:17px;height:17px;opacity:.75;transition:opacity .15s,color .15s}
 aside nav button:hover svg.nav-icon{opacity:1}
@@ -264,14 +247,12 @@ aside nav button.selected svg.nav-icon{opacity:1;color:#5fd0b6}
 .nav-category>button.selected::before{left:-1px;top:6px;bottom:6px}
 .nav-category[open]>button{animation:sl-nav-in .22s ease both}
 @keyframes sl-nav-in{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
-/* Overview category cards share the same chevron chip. */
 .dashboard-category>summary::before{content:none}
 .dashboard-category>summary svg.nav-icon{width:20px;height:20px;padding:7px;box-sizing:content-box;border-radius:10px;background:var(--sl-accent-soft);color:var(--sl-accent)}
 .dashboard-category>summary svg.nav-chevron{margin-left:auto;width:28px;height:28px;padding:8px;box-sizing:border-box;border-radius:50%;background:var(--sl-soft);border:1px solid var(--sl-line);stroke-width:2.4;color:var(--sl-muted);transition:transform .25s cubic-bezier(.3,1.4,.5,1),background .2s,color .2s}
 .dashboard-category>summary:hover svg.nav-chevron{color:var(--sl-accent);border-color:#a9d3cb}
 .dashboard-category[open]>summary svg.nav-chevron{transform:rotate(90deg);background:var(--sl-accent);border-color:var(--sl-accent);color:#fff}
 .tool-icon svg.icon{width:21px;height:21px}
-/* Folder picker and dialog */
 .server-folder-button>span:first-child{display:inline-flex;color:var(--sl-accent)}
 .server-folder-button .folder-arrow{display:inline-flex;color:var(--sl-muted)}
 .server-folder-button .folder-arrow svg{width:16px;height:16px;transform:rotate(90deg);transition:transform .2s}
@@ -283,12 +264,10 @@ aside nav button.selected svg.nav-icon{opacity:1;color:#5fd0b6}
 .folder-directory:hover .folder-directory-next{transform:translateX(3px);color:var(--sl-accent)}
 .folder-breadcrumbs button{display:inline-flex;align-items:center;gap:6px}
 .folder-breadcrumbs button svg{width:15px;height:15px}
-/* Console-style tables keep a dark body. */
 .page .table-scroll.console-table{background:#0f2427;border-color:#1e3c40}
 .page .table-scroll.console-table td{color:#d4ece6;background:transparent;border-bottom-color:#1e3c40}
 .page .table-scroll.console-table tbody tr:hover td,.page .table-scroll.console-table tr:hover td{background:#163539}
 .page .table-scroll.console-table th{background:#17383d;color:#9fc7bf;border-bottom-color:#1e3c40}
-/* Running actions: highlighted status with spinner and progress shimmer. */
 .is-busy{position:relative;display:flex!important;align-items:center;gap:12px;width:fit-content;max-width:100%;margin:14px 0;padding:11px 18px 11px 14px;border:1px solid #bfe2d9;border-radius:10px;background:#eaf6f2;color:#16584f!important;font-size:13px!important;font-weight:600;overflow:hidden;box-shadow:0 0 0 0 #2a938433;animation:sl-busy-pulse 2s ease-out infinite}
 .is-busy::before{content:'';flex:0 0 16px;width:16px;height:16px;border-radius:50%;border:2.5px solid #2a938433;border-top-color:var(--sl-accent);animation:sl-spin .8s linear infinite}
 .is-busy::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--sl-accent),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:sl-shimmer 1.4s ease-in-out infinite}
@@ -296,7 +275,6 @@ aside nav button.selected svg.nav-icon{opacity:1;color:#5fd0b6}
 @keyframes sl-shimmer{from{background-position:-40% 0}to{background-position:140% 0}}
 @keyframes sl-busy-pulse{0%{box-shadow:0 0 0 0 #2a938440}70%{box-shadow:0 0 0 8px #2a938400}100%{box-shadow:0 0 0 0 #2a938400}}
 @media (prefers-reduced-motion:reduce){.is-busy,.is-busy::before,.is-busy::after,.nav-category[open]>button{animation:none}}
-/* Friendly result notes */
 .result-note{display:flex;align-items:flex-start;gap:12px;margin:16px 0;padding:14px 18px;border-radius:10px;border:1px solid #cfe7e0;background:#eef8f4;color:#1d5a50;font-size:13px}
 .result-note svg{width:20px;height:20px;flex:0 0 20px;margin-top:1px}
 .result-note.warn{border-color:#f1dcb4;background:#fff7e8;color:#6d4b14}

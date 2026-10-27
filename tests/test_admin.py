@@ -1,4 +1,3 @@
-"""Safety and persistence tests. Host commands are always mocked on Windows."""
 import hashlib
 import io
 import json

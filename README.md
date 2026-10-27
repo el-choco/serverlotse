@@ -6,7 +6,7 @@
 
 **Eine selbst gehostete Weboberfläche, die deinen Linux-Homeserver erklärt, überwacht und sicher verwaltet –<br>mit Vorschau vor jeder Änderung und ganz ohne Cloud.**
 
-![Version](https://img.shields.io/badge/version-0.7.4-127a6f?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-0.7.5-127a6f?style=for-the-badge)
 ![Lizenz](https://img.shields.io/badge/lizenz-MIT-0f2629?style=for-the-badge)
 ![Python](https://img.shields.io/badge/python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
@@ -210,7 +210,7 @@ Optionale Hostwerkzeuge werden je Funktion erkannt und bei Bedarf zur Installati
 
 ```bash
 # 1. Projekt auf den Server kopieren
-unzip ServerLotse-0.7.4.zip -d /mnt/daten/serverlotse
+unzip ServerLotse-0.7.5.zip -d /mnt/daten/serverlotse
 cd /mnt/daten/serverlotse
 
 # 2. Konfiguration anlegen
@@ -356,6 +356,19 @@ SERVERLOTSE_DEMO=1 python server.py   # → http://127.0.0.1:8099
 - Große Scans brauchen freien Plattenplatz für den temporären Index; Ergebnislisten bleiben begrenzt.
 - Proxys nicht parallel auf belegten Ports installieren; Nginx Proxy Manager wird nicht verändert.
 
+---
+
+## 📚 Weitere Dokumentation
+
+| Dokument | Inhalt |
+|---|---|
+| 📘 [OPERATIONS.md](OPERATIONS.md) | Bedienung der Verwaltungsfunktionen, Backups, Proxy/TLS |
+| 🔧 [WORKBENCH.md](WORKBENCH.md) | Docker-Radar, Klonen, Janitor, Wächter, Testrestore |
+| 🛠️ [WORKSHOP.md](WORKSHOP.md) | Cronjobs, Rücknahme, Notfallbremse, DDNS, Trivy |
+| 🗂️ [ADMINISTRATION.md](ADMINISTRATION.md) | Basisverwaltung: Dateien, Benutzer, Dienste |
+| 🩻 [DIAGNOSTICS.md](DIAGNOSTICS.md) | Diagnose-Referenz |
+| 🔄 [UPDATE.md](UPDATE.md) | Update-Anleitung |
+| 📝 [CHANGELOG.md](CHANGELOG.md) | Alle Änderungen je Version |
 
 ---
 

@@ -1,4 +1,3 @@
-"""Bounded security/diagnostic observations and opt-in checks. No default repairs."""
 import copy
 import datetime
 import glob
@@ -177,7 +176,6 @@ def certificates():
     rows=[];seen=set()
     for path,allowed in paths:
         try:
-            # Let's Encrypt live/fullchain.pem is intentionally a managed symlink.
             resolved=path.resolve(strict=True)
             allowed=allowed.resolve(strict=True)
             if not (allowed==resolved or allowed in resolved.parents):continue
@@ -241,7 +239,6 @@ def rotation_path(value):
 
 
 def rotation_matches(path):
-    # Only literal /var/log patterns in existing configs; no evaluating directives.
     patterns=re.findall(r'(?m)(?:^|\s)(/var/log/[^\s{};]+)',path.read_text())
     files=[]
     for pattern in patterns[:50]:
@@ -445,7 +442,6 @@ def record_cpu(now=None):
 
 
 def process_loop():
-    # A slow network endpoint or Docker daemon must not block CPU sampling.
     while True:
         try:record_cpu()
         except Exception:pass

@@ -79,7 +79,6 @@ class HTTPAuthenticationTests(unittest.TestCase):
         self.assertNotIn(self.key, cookie + body.decode())
         self.assertIn("HttpOnly", headers["Set-Cookie"])
         self.assertEqual(self.request("GET", "/api/settings", headers={"Cookie": cookie})[0], 200)
-        # A new connection has no bearer token but is authenticated by its cookie.
         self.assertEqual(self.request("GET", "/api/jobs", headers={"Cookie": cookie})[0], 200)
         self.assertEqual(self.request("POST", "/api/logout", {}, {"Cookie": cookie})[0], 200)
         self.assertEqual(self.request("GET", "/api/settings", headers={"Cookie": cookie})[0], 401)

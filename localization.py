@@ -1,4 +1,3 @@
-"""Shared German, English and Spanish message catalog for API and browser."""
 import json
 from pathlib import Path
 import re
@@ -37,7 +36,6 @@ def text(value, lang):
 
 
 def payload(body, lang):
-    """Translate display messages, never filenames, log evidence or identifiers."""
     def walk(value, key="", action=""):
         if isinstance(value, dict):
             action = value.get("action", action)

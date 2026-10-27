@@ -3,6 +3,5 @@ __pycache__
 *.zip
 *.sha256
 
-# Dokumentation wird im Image nicht gebraucht
 *.md
 docs/

@@ -1,4 +1,3 @@
-/* The only remembered credential is an HttpOnly session cookie issued by the server. */
 const rememberLabel = el('label', undefined, 'remember-session');
 const remember = document.createElement('input');
 remember.type = 'checkbox';
